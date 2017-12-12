@@ -27,17 +27,28 @@ public class Account implements Serializable
             
         if(dateflag != true) 
         {
-            getdate1(); 
+            getdate1();
+            System.out.println("Enter your deposit amount");
+            double input = sc.nextDouble();
+            balance += input;
+            calcInterest();
+            System.out.println("Your balance total currently is: " + balance);
+            
         }
         else
         {  
-            getdate2();   
+            getdate2();
+            System.out.println("Enter your deposit amount");
+            double input = sc.nextDouble();
+            balance += input;
+            calcInterest();
+            System.out.println("Your balance total currently is: " + balance);
         }
-           System.out.println("Enter your deposit amount");
-           double input = sc.nextDouble();
-           balance = balance + input;
-           calcInterest();
-           System.out.println("Your balance total currently is: " + balance); 
+//           System.out.println("Enter your deposit amount");
+//           double input = sc.nextDouble();
+//           balance = balance + input;
+//           calcInterest();
+//           System.out.println("Your balance total currently is: " + balance); 
     }
      
     public void withdraw()
@@ -77,40 +88,36 @@ public class Account implements Serializable
      
     public void getdate2()
     {
-        System.out.println("Enter Date ('MM/DD/YYYY')");
-        Calendar cal2 = Calendar.getInstance();
-        Scanner sc = new Scanner(System.in);
-        String input = sc.next();
-        SimpleDateFormat formatter;
-        formatter = new SimpleDateFormat("MM/DD/YYYY");
-        ParsePosition pos = new ParsePosition(0);
-        Date date = formatter.parse(input, pos);
-        cal2.setTime(date);
-        laterdate = cal2.get(Calendar.DAY_OF_YEAR);
+        do{
+            System.out.println("Enter Date ('MM/DD/YYYY')");
+            Calendar cal2 = Calendar.getInstance();
+            Scanner sc = new Scanner(System.in);
+            String input = sc.next();
+            SimpleDateFormat formatter;
+            formatter = new SimpleDateFormat("MM/DD/YYYY");
+            ParsePosition pos = new ParsePosition(0);
+            Date date = formatter.parse(input, pos);
+            cal2.setTime(date);
+            laterdate = cal2.get(Calendar.DAY_OF_YEAR);
              
-        if(laterdate >= initialdate)
-        {
-            calcInterest();
-            initialdate = laterdate;
-        }
-          
-        else
-        {
-            System.out.println("Please enter a date after " + initialdate);    
-        }      
+            if(laterdate < initialdate)
+            {
+                System.out.println("Please enter a date after " + initialdate);
+            }          
+        }while(laterdate < initialdate);
     }
      
     public void calcInterest()
     {
         int datediff = laterdate - initialdate;
-        rate = .072;
+        rate = .072/365;
 //        rate can be changed, I just entered a random value in
-//        double ratetime = Math.pow(1+rate,datediff);
+        double ratetime = Math.pow(1+rate,datediff);
              
-        if(laterdate != 0)
+        if(laterdate > 0)
         {   
-            balance = balance * ((datediff/30) * rate);
-            initialdate = laterdate;
+            balance = balance * ratetime;
+//            initialdate = laterdate;
         }
     }
          
